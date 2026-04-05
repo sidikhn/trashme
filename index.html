@@ -1,0 +1,1281 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrashMe - V8 Complete System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
+
+    <style>
+      /* === DESAIN DASAR === */
+      body {
+        background: linear-gradient(135deg, #f0fdf4 0%, #f3f4f6 100%);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        color: #1f2937;
+      }
+      #app-container {
+        width: 360px;
+        height: 640px;
+        background-color: #fafafa;
+        border-radius: 30px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+        border: 6px solid #ffffff;
+      }
+      main {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 20px;
+        padding-bottom: 90px;
+      }
+      main::-webkit-scrollbar {
+        display: none;
+      }
+
+      .page {
+        display: none;
+        animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .page.active {
+        display: block;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* === TYPOGRAPHY & CARDS === */
+      h3 {
+        margin: 0 0 12px 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
+      }
+      .text-muted {
+        color: #6b7280;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 18px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 24px rgba(149, 157, 165, 0.08);
+        position: relative;
+      }
+      .profile-img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #10b981;
+        padding: 2px;
+        background: white;
+      }
+
+      /* === FORM & BUTTONS === */
+      .input-group {
+        margin-bottom: 16px;
+        text-align: left;
+      }
+      .input-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .input-group input,
+      .input-group select {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #f3f4f6;
+        border-radius: 14px;
+        box-sizing: border-box;
+        font-size: 14px;
+        font-family: inherit;
+        background: #ffffff;
+        outline: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+      .input-group input:focus,
+      .input-group select:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 16px;
+        border-radius: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 15px;
+        font-family: inherit;
+        transition: 0.2s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      }
+      .btn-primary:active {
+        transform: scale(0.97);
+      }
+      .btn-outline {
+        background-color: transparent;
+        color: #10b981;
+        border: 2px solid #10b981;
+        width: 100%;
+        padding: 14px;
+        border-radius: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 15px;
+        margin-top: 10px;
+        font-family: inherit;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-outline:active {
+        background-color: #ecfdf5;
+        transform: scale(0.97);
+      }
+      .btn-text {
+        color: #10b981;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-top: 5px;
+        width: max-content;
+      }
+      .auth-link {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 14px;
+        color: #6b7280;
+        font-weight: 500;
+      }
+      .auth-link span {
+        color: #10b981;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      /* === WARGA: BANNER, LOCATION, PRICES === */
+      .banner-slider {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 15px;
+        margin-bottom: 24px;
+        scrollbar-width: none;
+        padding-bottom: 5px;
+      }
+      .banner-item {
+        flex: 0 0 100%;
+        scroll-snap-align: start;
+        background-size: cover;
+        background-position: center;
+        border-radius: 20px;
+        color: white;
+        padding: 28px 20px;
+        position: relative;
+        overflow: hidden;
+        box-sizing: border-box;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+      .banner-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.1) 100%);
+      }
+      .banner-content {
+        position: relative;
+        z-index: 1;
+      }
+      .banner-content h2 {
+        margin: 0 0 6px 0;
+        font-size: 20px;
+        font-weight: 800;
+      }
+      .banner-content p {
+        margin: 0;
+        font-size: 13px;
+        opacity: 0.9;
+        line-height: 1.5;
+      }
+
+      .location-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f0fdf4;
+        padding: 12px 16px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+        border: 1px dashed #10b981;
+      }
+      .loc-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .loc-left .material-symbols-rounded {
+        color: #10b981;
+        font-size: 20px;
+      }
+      .loc-text p {
+        margin: 0;
+        font-size: 12px;
+        color: #111827;
+        font-weight: 600;
+      }
+      .loc-text span {
+        font-size: 10px;
+        color: #6b7280;
+      }
+      .btn-loc {
+        background: white;
+        color: #10b981;
+        border: 1px solid #10b981;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .price-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .price-box {
+        border: 1px solid #f3f4f6;
+        padding: 14px;
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        background: #ffffff;
+        transition: 0.2s;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        cursor: pointer;
+      }
+      .price-box:active {
+        transform: scale(0.95);
+        border-color: #10b981;
+      }
+      .price-box .material-symbols-rounded {
+        font-size: 28px;
+        color: #10b981;
+        margin-bottom: 10px;
+        background: #ecfdf5;
+        padding: 8px;
+        border-radius: 12px;
+      }
+      .price-box .type {
+        font-size: 12px;
+        color: #4b5563;
+        font-weight: 600;
+      }
+      .price-box .price {
+        font-weight: 800;
+        color: #111827;
+        font-size: 14px;
+        margin-top: 2px;
+      }
+
+      .article-card {
+        display: flex;
+        gap: 14px;
+        margin-bottom: 16px;
+        cursor: pointer;
+        align-items: center;
+      }
+      .article-img {
+        width: 85px;
+        height: 85px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 14px;
+        flex-shrink: 0;
+      }
+      .article-text h4 {
+        margin: 0 0 6px 0;
+        font-size: 14px;
+        color: #111827;
+        line-height: 1.3;
+        font-weight: 700;
+      }
+
+      /* === MITRA: STATS === */
+      .stat-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .stat-box {
+        background: white;
+        border-radius: 16px;
+        padding: 16px;
+        border: 1px solid #f3f4f6;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      }
+      .stat-box h4 {
+        margin: 0 0 4px 0;
+        font-size: 12px;
+        color: #6b7280;
+        font-weight: 600;
+      }
+      .stat-box h2 {
+        margin: 0;
+        font-size: 20px;
+        color: #111827;
+        font-weight: 800;
+      }
+      .stat-box .icon {
+        font-size: 24px;
+        color: #10b981;
+        margin-bottom: 8px;
+      }
+
+      /* === SHARED: WALLET & TX ITEMS === */
+      .wallet-card {
+        background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 20px;
+        border-radius: 20px;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(17, 24, 39, 0.2);
+      }
+      .wallet-card::after {
+        content: 'eco';
+        position: absolute;
+        right: -15px;
+        bottom: -25px;
+        font-size: 120px;
+        color: rgba(255, 255, 255, 0.03);
+        font-weight: bold;
+        font-family: sans-serif;
+        transform: rotate(-10deg);
+      }
+      .btn-qris {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 12px 16px;
+        border-radius: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: inherit;
+        font-size: 14px;
+        z-index: 1;
+        transition: 0.2s;
+      }
+
+      .tx-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 0;
+        border-bottom: 1px solid #f3f4f6;
+        cursor: pointer;
+      }
+      .tx-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .tx-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .tx-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: #ecfdf5;
+        color: #10b981;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .tx-title {
+        font-weight: 700;
+        font-size: 14px;
+        margin: 0 0 2px 0;
+        color: #111827;
+      }
+      .tx-amount {
+        font-weight: 800;
+        color: #10b981;
+        font-size: 14px;
+        text-align: right;
+      }
+
+      /* === AI CAMERA & MODALS === */
+      .camera-box {
+        background: #111827;
+        height: 340px;
+        border-radius: 20px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        margin-bottom: 20px;
+        overflow: hidden;
+        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
+      }
+      .scan-line {
+        width: 100%;
+        height: 3px;
+        background: #10b981;
+        position: absolute;
+        top: 0;
+        animation: scan 2s infinite linear;
+        box-shadow:
+          0 0 20px #10b981,
+          0 0 5px #fff;
+      }
+      @keyframes scan {
+        0% {
+          top: 0%;
+        }
+        50% {
+          top: 100%;
+        }
+        100% {
+          top: 0%;
+        }
+      }
+
+      /* Full Overlay (QRIS Warga) */
+      .overlay-full {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(5px);
+        z-index: 100;
+        display: none;
+        flex-direction: column;
+        color: white;
+      }
+      .modal-header {
+        padding: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 700;
+        font-size: 18px;
+      }
+      .qr-frame {
+        width: 240px;
+        height: 240px;
+        border: 4px dashed #10b981;
+        border-radius: 24px;
+        position: relative;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(16, 185, 129, 0.05);
+      }
+
+      /* Slide Up Modal (Verifikasi Mitra) */
+      .overlay-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(17, 24, 39, 0.6);
+        backdrop-filter: blur(8px);
+        z-index: 100;
+        display: none;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+      .modal-content {
+        background: white;
+        width: 100%;
+        border-radius: 30px 30px 0 0;
+        padding: 24px;
+        box-sizing: border-box;
+        animation: slideUpModal 0.3s ease-out;
+      }
+      @keyframes slideUpModal {
+        from {
+          transform: translateY(100%);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+      .modal-drag-handle {
+        width: 40px;
+        height: 5px;
+        background: #e5e7eb;
+        border-radius: 10px;
+        margin: 0 auto 20px auto;
+      }
+
+      /* === TOAST NOTIFICATION === */
+      #toast {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: #1f2937;
+        color: #fff;
+        text-align: center;
+        border-radius: 12px;
+        padding: 14px;
+        position: absolute;
+        z-index: 200;
+        left: 50%;
+        bottom: 100px;
+        transform: translateX(-50%);
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+      #toast.show {
+        visibility: visible;
+        animation:
+          fadein 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+          fadeout 0.4s 2.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      @keyframes fadein {
+        from {
+          bottom: 80px;
+          opacity: 0;
+        }
+        to {
+          bottom: 100px;
+          opacity: 1;
+        }
+      }
+      @keyframes fadeout {
+        from {
+          bottom: 100px;
+          opacity: 1;
+        }
+        to {
+          bottom: 80px;
+          opacity: 0;
+        }
+      }
+
+      /* === BOTTOM NAVIGATION === */
+      nav {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-around;
+        padding: 16px 0 24px 0;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        display: none;
+        z-index: 50;
+      }
+      .nav-btn {
+        background: none;
+        border: none;
+        color: #9ca3af;
+        font-size: 11px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        gap: 6px;
+        font-family: inherit;
+        font-weight: 600;
+        flex: 1;
+        transition: 0.3s;
+      }
+      .nav-btn .material-symbols-rounded {
+        font-size: 26px;
+        transition: 0.3s;
+      }
+      .nav-btn.active {
+        color: #10b981;
+      }
+      .nav-btn.active .material-symbols-rounded {
+        font-variation-settings: 'FILL' 1;
+        transform: translateY(-3px);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app-container">
+      <main>
+        <div id="view-login" class="page active" style="padding-top: 40px">
+          <div style="text-align: center; margin-bottom: 40px">
+            <div style="background: #ecfdf5; width: 80px; height: 80px; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto">
+              <span class="material-symbols-rounded" style="font-size: 48px; color: #10b981">eco</span>
+            </div>
+            <h1 style="margin: 0 0 8px 0; color: #111827; font-size: 26px; font-weight: 800">TrashMe</h1>
+            <p class="text-muted" style="font-size: 14px">Ubah sampah jadi berkah</p>
+          </div>
+
+          <div class="input-group">
+            <label>Email</label>
+            <input type="email" id="login-email" value="budi@email.com" />
+          </div>
+          <div class="input-group">
+            <label>Kata Sandi</label>
+            <input type="password" id="login-pass" value="123456" />
+          </div>
+          <div class="input-group">
+            <label>Masuk Sebagai</label>
+            <select id="login-role">
+              <option value="warga">Warga (Personal)</option>
+              <option value="mitra">Mitra (Outlet/Warung)</option>
+            </select>
+          </div>
+
+          <button class="btn-primary" onclick="processLogin()" style="margin-top: 10px">Masuk Sekarang</button>
+          <p class="auth-link">Belum punya akun? <span onclick="switchPage('view-signup')">Daftar gratis</span></p>
+        </div>
+
+        <div id="view-signup" class="page" style="padding-top: 20px">
+          <div style="text-align: center; margin-bottom: 24px">
+            <span class="material-symbols-rounded" style="font-size: 40px; color: #10b981">eco</span>
+            <h2 style="margin: 8px 0 0 0; font-size: 22px; font-weight: 800">Buat Akun Baru</h2>
+          </div>
+
+          <div class="input-group">
+            <label>Nama Lengkap</label>
+            <input type="text" placeholder="Nama Anda" />
+          </div>
+          <div class="input-group">
+            <label>Email</label>
+            <input type="email" placeholder="contoh@email.com" />
+          </div>
+          <div class="input-group">
+            <label>Kata Sandi</label>
+            <input type="password" placeholder="Buat kata sandi" />
+          </div>
+          <div class="input-group">
+            <label>Daftar Sebagai</label>
+            <select id="signup-role">
+              <option value="warga">Warga (Personal)</option>
+              <option value="mitra">Mitra (Outlet/Warung)</option>
+            </select>
+          </div>
+
+          <button class="btn-primary" onclick="processSignup()">Daftar & Masuk</button>
+          <p class="auth-link">Sudah punya akun? <span onclick="switchPage('view-login')">Masuk di sini</span></p>
+        </div>
+
+        <div id="view-w-home" class="page">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px">
+            <div>
+              <span class="text-muted">Selamat datang kembali,</span>
+              <h3 style="margin: 0; font-size: 18px">Budi Santoso</h3>
+            </div>
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" alt="Profile" class="profile-img" />
+          </div>
+
+          <div class="banner-slider" id="warga-slider">
+            <div class="banner-item" style="background-image: url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=600&q=80')">
+              <div class="banner-content">
+                <h2>Ubah Sampah Jadi Cuan</h2>
+                <p>Pilah dari rumah, lindungi bumi kita, dan nikmati hasilnya.</p>
+              </div>
+            </div>
+            <div class="banner-item" style="background-image: url('https://images.unsplash.com/photo-1611284446314-60a58ac0deb9?auto=format&fit=crop&w=600&q=80')">
+              <div class="banner-content">
+                <h2>Tukar Minyak Jelantah</h2>
+                <p>Jangan buang ke wastafel! Tukarkan minyak jelantahmu sekarang.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="wallet-card">
+            <div class="wallet-info">
+              <p style="color: #9ca3af; margin: 0; font-size: 13px; font-weight: 600">Saldo TrashPay</p>
+              <h2 style="margin: 4px 0 0 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px">Rp 50.875</h2>
+            </div>
+            <button class="btn-qris" onclick="openModal('modal-qris')"><span class="material-symbols-rounded" style="font-size: 20px">qr_code_scanner</span> Bayar</button>
+          </div>
+
+          <div class="card" style="padding: 16px">
+            <div class="location-box">
+              <div class="loc-left">
+                <span class="material-symbols-rounded">my_location</span>
+                <div class="loc-text">
+                  <span>Lokasi Anda</span>
+                  <p id="user-location">Jl. Sudirman No. 10</p>
+                </div>
+              </div>
+              <button class="btn-loc" onclick="showToast('Mengakses GPS...')">Ubah</button>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px">
+              <div>
+                <h3 style="margin-bottom: 4px; display: flex; align-items: center; gap: 6px"><span class="material-symbols-rounded" style="color: #ef4444; font-size: 18px">storefront</span> Outlet Terdekat</h3>
+                <p class="text-muted" style="margin: 0">Mitra Mawar • Jarak: 1.2 km</p>
+              </div>
+              <button class="btn-primary" style="width: auto; padding: 10px 16px; margin: 0; font-size: 12px; border-radius: 12px" onclick="showToast('Buka rute Maps')">Rute</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 24px">
+            <h3 style="margin-bottom: 16px; padding-left: 4px">Harga Pasaran Hari Ini</h3>
+            <div class="price-grid">
+              <div class="price-box" onclick="showToast('Harga Plastik PET: Rp 3.500/kg')">
+                <span class="material-symbols-rounded">water_bottle</span>
+                <div class="type">Plastik PET</div>
+                <div class="price">Rp 3.500/kg</div>
+              </div>
+              <div class="price-box" onclick="showToast('Harga Kardus/Kertas: Rp 2.000/kg')">
+                <span class="material-symbols-rounded">inventory_2</span>
+                <div class="type">Kardus</div>
+                <div class="price">Rp 2.000/kg</div>
+              </div>
+              <div class="price-box" onclick="showToast('Harga Kaleng/Besi: Rp 4.500/kg')">
+                <span class="material-symbols-rounded">recycling</span>
+                <div class="type">Kaleng/Besi</div>
+                <div class="price">Rp 4.500/kg</div>
+              </div>
+              <div class="price-box" onclick="showToast('Harga Minyak Jelantah: Rp 5.000/L')">
+                <span class="material-symbols-rounded">oil_barrel</span>
+                <div class="type">Minyak Jelantah</div>
+                <div class="price">Rp 5.000/L</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px">
+              <h3>Aktivitas Terakhir</h3>
+              <span class="text-muted" style="color: #10b981; font-weight: 700; cursor: pointer" onclick="switchTabWarga('w-history')">Lihat Semua</span>
+            </div>
+            <div class="tx-item" onclick="showToast('Detail Transaksi: 2.5 kg Plastik')">
+              <div class="tx-left">
+                <div class="tx-icon"><span class="material-symbols-rounded">recycling</span></div>
+                <div>
+                  <p class="tx-title">Setor Sampah</p>
+                  <p class="text-muted" style="margin: 0">Outlet Mawar • Hari ini</p>
+                </div>
+              </div>
+              <div class="tx-amount">+Rp 8.500</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-bottom: 16px">Inspirasi Lingkungan</h3>
+            <div class="article-card" onclick="showToast('Buka Artikel 1')">
+              <div class="article-img" style="background-image: url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=200&q=80')"></div>
+              <div class="article-text">
+                <h4>Bahaya Plastik di Lautan Kita</h4>
+                <p class="text-muted" style="margin-bottom: 4px; font-size: 11px">Ketahui dampaknya pada ekosistem laut...</p>
+                <div class="btn-text">Baca <span class="material-symbols-rounded" style="font-size: 14px">arrow_forward</span></div>
+              </div>
+            </div>
+            <div class="article-card" onclick="showToast('Buka Artikel 2')">
+              <div class="article-img" style="background-image: url('https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=200&q=80')"></div>
+              <div class="article-text">
+                <h4>Pentingnya Pemilahan Sampah</h4>
+                <p class="text-muted" style="margin-bottom: 4px; font-size: 11px">Cara mudah memulai dari rumah...</p>
+                <div class="btn-text">Baca <span class="material-symbols-rounded" style="font-size: 14px">arrow_forward</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-w-scan" class="page">
+          <h3>Kamera AI Cerdas</h3>
+          <p class="text-muted" style="margin-top: -8px; margin-bottom: 20px">Arahkan kamera ke sampah, AI akan mendeteksi jenisnya.</p>
+
+          <div class="camera-box">
+            <div class="scan-line"></div>
+            <div style="text-align: center; opacity: 0.6">
+              <span class="material-symbols-rounded" style="font-size: 56px">view_in_ar</span>
+              <p style="font-weight: 600; font-size: 14px">Menganalisis objek...</p>
+            </div>
+          </div>
+
+          <div class="card" style="text-align: center; padding: 24px">
+            <div style="background: #ecfdf5; display: inline-block; padding: 8px 16px; border-radius: 20px; color: #10b981; font-weight: 700; font-size: 12px; margin-bottom: 10px">Hasil Deteksi</div>
+            <h2 style="margin: 0 0 8px 0; color: #111827; font-size: 22px">Botol Plastik PET</h2>
+            <p style="font-weight: 700; color: #4b5563; margin: 0 0 20px 0">Estimasi Harga: <span style="color: #10b981">Rp 3.500 / kg</span></p>
+            <button class="btn-primary" onclick="showToast('Disimpan ke draf setoran! Bawa ke outlet terdekat.')"><span class="material-symbols-rounded">save</span> Simpan Draf</button>
+          </div>
+        </div>
+
+        <div id="view-w-history" class="page">
+          <h3>Riwayat Transaksi</h3>
+          <div class="card">
+            <div class="tx-item">
+              <div class="tx-left">
+                <div class="tx-icon"><span class="material-symbols-rounded">recycling</span></div>
+                <div>
+                  <p class="tx-title">Setor Sampah</p>
+                  <p class="text-muted" style="margin: 0">Outlet Mawar • Hari ini</p>
+                </div>
+              </div>
+              <div class="tx-amount">+Rp 8.500</div>
+            </div>
+            <div class="tx-item">
+              <div class="tx-left">
+                <div class="tx-icon" style="background: #fee2e2; color: #ef4444"><span class="material-symbols-rounded">shopping_bag</span></div>
+                <div>
+                  <p class="tx-title">Bayar QRIS Indomaret</p>
+                  <p class="text-muted" style="margin: 0">Kemarin</p>
+                </div>
+              </div>
+              <div class="tx-amount" style="color: #111827">-Rp 15.000</div>
+            </div>
+            <div class="tx-item">
+              <div class="tx-left">
+                <div class="tx-icon"><span class="material-symbols-rounded">recycling</span></div>
+                <div>
+                  <p class="tx-title">Setor Sampah</p>
+                  <p class="text-muted" style="margin: 0">Bank Sampah RT • 12 Ags</p>
+                </div>
+              </div>
+              <div class="tx-amount">+Rp 12.000</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-w-profile" class="page">
+          <div style="text-align: center; margin-bottom: 24px; margin-top: 10px">
+            <img
+              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"
+              alt="Profile"
+              style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 4px solid #10b981; margin-bottom: 12px; padding: 3px; background: white"
+            />
+            <h2 style="margin: 0; font-weight: 800; font-size: 22px">Budi Santoso</h2>
+            <p class="text-muted" style="margin: 5px 0">budi@email.com</p>
+          </div>
+
+          <div class="card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center">
+            <div style="padding: 10px">
+              <h3 style="color: #10b981; margin: 0; font-size: 26px; font-weight: 800">25.5 <span style="font-size: 14px; color: #111827">kg</span></h3>
+              <p class="text-muted" style="margin: 5px 0 0 0">Total Disetor</p>
+            </div>
+            <div style="padding: 10px; border-left: 2px dashed #f3f4f6">
+              <h3 style="color: #10b981; margin: 0; font-size: 26px; font-weight: 800">15.2 <span style="font-size: 14px; color: #111827">kg</span></h3>
+              <p class="text-muted" style="margin: 5px 0 0 0">CO2 Dicegah</p>
+            </div>
+          </div>
+
+          <button class="btn-primary" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); margin-top: 20px" onclick="doLogout()">Keluar Akun</button>
+        </div>
+
+        <div id="view-m-home" class="page">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px">
+            <div>
+              <span class="text-muted" style="color: #10b981; font-weight: 700">Dashboard Mitra</span>
+              <h3 style="margin: 0; font-size: 20px; font-weight: 800">Outlet Mawar</h3>
+            </div>
+            <div style="background: #ecfdf5; padding: 10px; border-radius: 14px; cursor: pointer" onclick="switchTabMitra('m-profile')">
+              <span class="material-symbols-rounded" style="color: #10b981; font-size: 28px">storefront</span>
+            </div>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat-box">
+              <span class="material-symbols-rounded icon">scale</span>
+              <h4>Total Berat (Hari Ini)</h4>
+              <h2>45.2 <span style="font-size: 14px; color: #6b7280; font-weight: 600">kg</span></h2>
+            </div>
+            <div class="stat-box">
+              <span class="material-symbols-rounded icon" style="color: #3b82f6">account_balance_wallet</span>
+              <h4>Saldo Kas Tersedia</h4>
+              <h2 style="font-size: 18px">Rp 350.000</h2>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px">
+            <button class="btn-primary" style="flex-direction: column; gap: 8px; padding: 20px 10px; border-radius: 20px" onclick="switchTabMitra('m-scan')">
+              <span class="material-symbols-rounded" style="font-size: 32px">qr_code_scanner</span>
+              <span>Scan QR Warga</span>
+            </button>
+            <button class="btn-outline" style="margin: 0; flex-direction: column; gap: 8px; padding: 20px 10px; border-radius: 20px; border-width: 2px" onclick="openInputManual()">
+              <span class="material-symbols-rounded" style="font-size: 32px">edit_document</span>
+              <span>Input Manual</span>
+            </button>
+          </div>
+
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
+              <h3 style="margin: 0">Antrean AI Cerdas</h3>
+              <span class="material-symbols-rounded" style="color: #d97706; font-size: 20px">info</span>
+            </div>
+
+            <div id="ai-queue-list">
+              <div class="tx-item" style="background: #f9fafb; padding: 12px; border-radius: 12px; border: none; margin-bottom: 8px">
+                <div class="tx-left">
+                  <div class="tx-icon" style="background: #fef3c7; color: #d97706"><span class="material-symbols-rounded">pending</span></div>
+                  <div>
+                    <p class="tx-title">Siti Aminah</p>
+                    <p class="text-muted" style="margin: 0">Plastik PET • Estimasi 2.5 kg</p>
+                  </div>
+                </div>
+                <button
+                  style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 10px; font-weight: 700; cursor: pointer; font-family: inherit"
+                  onclick="openAIModal('Siti Aminah', 'Plastik PET', '2.5', '8.750')"
+                >
+                  Cek
+                </button>
+              </div>
+            </div>
+            <p id="ai-empty" style="text-align: center; color: #9ca3af; font-size: 13px; font-weight: 600; display: none; padding: 10px 0">Tidak ada antrean saat ini.</p>
+          </div>
+        </div>
+
+        <div id="view-m-scan" class="page">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px">
+            <span class="material-symbols-rounded" style="cursor: pointer" onclick="switchTabMitra('m-home')">arrow_back</span>
+            <h3 style="margin: 0; font-size: 18px">Scan QR Warga</h3>
+          </div>
+          <div class="camera-box" style="background: #111827">
+            <div style="width: 240px; height: 240px; border: 4px dashed #10b981; border-radius: 24px; position: relative; margin: auto; display: flex; justify-content: center; align-items: center; background: rgba(16, 185, 129, 0.05)">
+              <div class="scan-line"></div>
+            </div>
+          </div>
+          <p class="text-muted" style="text-align: center; margin-bottom: 20px">Arahkan ke QR Code di HP penyetor.</p>
+          <button class="btn-primary" onclick="simulateQRScan()">Simulasikan Scan Berhasil</button>
+        </div>
+
+        <div id="view-m-input" class="page">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px">
+            <span class="material-symbols-rounded" style="cursor: pointer" onclick="switchTabMitra('m-home')">arrow_back</span>
+            <h3 style="margin: 0; font-size: 18px">Input Setoran Manual</h3>
+          </div>
+
+          <div class="card" style="padding: 24px 20px">
+            <div class="input-group">
+              <label>ID Warga / No HP</label>
+              <input type="text" id="in-warga" placeholder="Contoh: 08123456789" value="" />
+            </div>
+            <div class="input-group">
+              <label>Jenis Sampah</label>
+              <select id="in-jenis" onchange="calculatePrice()">
+                <option value="3500">Plastik PET (Rp 3.500/kg)</option>
+                <option value="2000">Kardus/Kertas (Rp 2.000/kg)</option>
+                <option value="4500">Kaleng/Besi (Rp 4.500/kg)</option>
+                <option value="1200">Kaca/Beling (Rp 1.200/kg)</option>
+                <option value="5000">Minyak Jelantah (Rp 5.000/L)</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Berat / Volume</label>
+              <div style="position: relative">
+                <input type="number" id="in-berat" placeholder="0.0" step="0.1" oninput="calculatePrice()" value="1" />
+                <span style="position: absolute; right: 16px; top: 14px; color: #6b7280; font-weight: 700; font-size: 14px">kg/L</span>
+              </div>
+            </div>
+
+            <div style="background: #f9fafb; padding: 16px; border-radius: 14px; text-align: center; margin-top: 24px; border: 1px dashed #d1d5db">
+              <p style="margin: 0 0 4px 0; font-size: 12px; color: #6b7280; font-weight: 600">Total Dibayarkan ke Warga</p>
+              <h2 id="in-total" style="margin: 0; font-size: 28px; color: #10b981; font-weight: 800">Rp 3.500</h2>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="submitManualInput()">Kirim Saldo & Selesaikan</button>
+        </div>
+
+        <div id="view-m-history" class="page">
+          <h3 style="margin-bottom: 20px">Riwayat Penerimaan</h3>
+          <div class="card">
+            <div class="tx-item">
+              <div class="tx-left">
+                <div class="tx-icon"><span class="material-symbols-rounded">check</span></div>
+                <div>
+                  <p class="tx-title">Budi Santoso</p>
+                  <p class="text-muted" style="margin: 0">Plastik PET • 2.5 kg</p>
+                </div>
+              </div>
+              <div class="tx-amount" style="color: #111827">Rp 8.750</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-m-profile" class="page">
+          <div class="card" style="text-align: center; padding: 30px 20px">
+            <div style="background: #ecfdf5; width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto">
+              <span class="material-symbols-rounded" style="font-size: 48px; color: #10b981">storefront</span>
+            </div>
+            <h2 style="margin: 0 0 4px 0; font-weight: 800">Outlet Mawar</h2>
+            <p class="text-muted" style="font-size: 14px">ID Mitra: MW-01293</p>
+            <div style="background: #10b981; color: white; display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; margin-top: 10px">Status: Aktif / Buka</div>
+          </div>
+          <button class="btn-primary" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%)" onclick="doLogout()">Keluar Aplikasi</button>
+        </div>
+      </main>
+
+      <div id="modal-qris" class="overlay-full">
+        <div class="modal-header">
+          <span class="material-symbols-rounded" onclick="closeModal('modal-qris')" style="cursor: pointer; font-size: 28px">close</span>
+          <span>Bayar Pakai QRIS</span>
+          <span style="width: 28px"></span>
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center">
+          <div class="qr-frame"><div class="scan-line"></div></div>
+          <p style="margin-top: 30px; font-weight: 500; opacity: 0.9">Arahkan kamera ke kode QRIS kasir.</p>
+          <button
+            class="btn-primary"
+            style="width: 80%; margin-top: 20px"
+            onclick="
+              closeModal('modal-qris');
+              showToast('Pembayaran Rp 15.000 Berhasil!');
+            "
+          >
+            Simulasikan Sukses
+          </button>
+        </div>
+      </div>
+
+      <div id="modal-ai-verify" class="overlay-slide">
+        <div class="modal-content">
+          <div class="modal-drag-handle" onclick="closeModal('modal-ai-verify')"></div>
+          <h3 style="margin-bottom: 20px; font-size: 20px; text-align: center">Verifikasi Deteksi AI</h3>
+          <div style="background: #f9fafb; border-radius: 16px; padding: 16px; margin-bottom: 20px; display: flex; gap: 16px; align-items: center">
+            <div style="width: 80px; height: 80px; background-image: url('https://images.unsplash.com/photo-1528323273322-d81458248d40?auto=format&fit=crop&w=200&q=80'); background-size: cover; border-radius: 12px"></div>
+            <div>
+              <p class="text-muted" style="margin: 0 0 4px 0">Pengirim</p>
+              <h4 id="ai-modal-name" style="margin: 0 0 8px 0; font-size: 16px">Siti Aminah</h4>
+              <span style="background: #ecfdf5; color: #10b981; padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700">Foto Objek Cocok</span>
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Konfirmasi Jenis Sampah</label>
+            <input type="text" id="ai-modal-type" value="Plastik PET" readonly style="background: #f3f4f6; color: #6b7280" />
+          </div>
+          <div class="input-group">
+            <label>Konfirmasi Berat Timbangan (kg)</label>
+            <input type="number" id="ai-modal-weight" value="2.5" step="0.1" />
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-top: 1px dashed #e5e7eb; margin-top: 10px">
+            <span class="text-muted" style="font-size: 14px">Total Saldo:</span>
+            <span id="ai-modal-total" style="font-size: 20px; font-weight: 800; color: #10b981">Rp 8.750</span>
+          </div>
+          <button class="btn-primary" onclick="confirmAIVerify()">Setujui & Kirim Saldo</button>
+        </div>
+      </div>
+
+      <div id="toast">Notifikasi muncul di sini</div>
+
+      <nav id="nav-warga">
+        <button class="nav-btn active" onclick="switchTabWarga('w-home')" id="tab-w-home"><span class="material-symbols-rounded">home</span>Beranda</button>
+        <button class="nav-btn" onclick="switchTabWarga('w-scan')" id="tab-w-scan"><span class="material-symbols-rounded">center_focus_strong</span>AI Scan</button>
+        <button class="nav-btn" onclick="switchTabWarga('w-history')" id="tab-w-history"><span class="material-symbols-rounded">receipt_long</span>Riwayat</button>
+        <button class="nav-btn" onclick="switchTabWarga('w-profile')" id="tab-w-profile"><span class="material-symbols-rounded">person</span>Profil</button>
+      </nav>
+
+      <nav id="nav-mitra">
+        <button class="nav-btn active" onclick="switchTabMitra('m-home')" id="tab-m-home"><span class="material-symbols-rounded">dashboard</span>Beranda</button>
+        <button class="nav-btn" onclick="switchTabMitra('m-scan')" id="tab-m-scan"><span class="material-symbols-rounded">qr_code_scanner</span>Scan QR</button>
+        <button class="nav-btn" onclick="switchTabMitra('m-history')" id="tab-m-history"><span class="material-symbols-rounded">list_alt</span>Riwayat</button>
+        <button class="nav-btn" onclick="switchTabMitra('m-profile')" id="tab-m-profile"><span class="material-symbols-rounded">store</span>Outlet</button>
+      </nav>
+    </div>
+
+    <script>
+      // --- CORE NAVIGATION ---
+      function hideAllPages() {
+        document.querySelectorAll('.page').forEach((el) => el.classList.remove('active'));
+      }
+
+      function switchPage(pageId) {
+        hideAllPages();
+        document.getElementById(pageId).classList.add('active');
+      }
+
+      // --- WARGA TABS ---
+      function switchTabWarga(tabName) {
+        switchPage('view-' + tabName);
+        document.querySelectorAll('#nav-warga .nav-btn').forEach((btn) => btn.classList.remove('active'));
+        let navBtn = document.getElementById('tab-' + tabName);
+        if (navBtn) navBtn.classList.add('active');
+      }
+
+      // --- MITRA TABS ---
+      function switchTabMitra(tabName) {
+        switchPage('view-' + tabName);
+        document.querySelectorAll('#nav-mitra .nav-btn').forEach((btn) => btn.classList.remove('active'));
+        let navBtn = document.getElementById('tab-' + tabName);
+        if (navBtn) navBtn.classList.add('active');
+      }
+
+      // --- AUTHENTICATION FLOW ---
+      function processLogin() {
+        const role = document.getElementById('login-role').value;
+        executeAuth(role);
+      }
+
+      function processSignup() {
+        const role = document.getElementById('signup-role').value;
+        showToast('Pendaftaran Berhasil!');
+        setTimeout(() => executeAuth(role), 1000);
+      }
+
+      function executeAuth(role) {
+        hideAllPages();
+        if (role === 'warga') {
+          document.getElementById('nav-warga').style.display = 'flex';
+          document.getElementById('nav-mitra').style.display = 'none';
+          switchTabWarga('w-home');
+          startBannerSlider();
+          showToast('Berhasil masuk sebagai Warga');
+        } else {
+          document.getElementById('nav-mitra').style.display = 'flex';
+          document.getElementById('nav-warga').style.display = 'none';
+          switchTabMitra('m-home');
+          showToast('Berhasil masuk sebagai Mitra');
+        }
+      }
+
+      function doLogout() {
+        hideAllPages();
+        document.getElementById('nav-warga').style.display = 'none';
+        document.getElementById('nav-mitra').style.display = 'none';
+        switchPage('view-login');
+        showToast('Anda telah keluar.');
+      }
+
+      // --- MODALS & TOASTS ---
+      function openModal(id) {
+        document.getElementById(id).style.display = 'flex';
+      }
+      function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+      }
+      function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.className = 'show';
+        setTimeout(function () {
+          toast.className = toast.className.replace('show', '');
+        }, 3000);
+      }
+
+      // --- WARGA: BANNER SLIDER ---
+      let sliderInterval;
+      function startBannerSlider() {
+        const slider = document.getElementById('warga-slider');
+        if (!slider) return;
+        clearInterval(sliderInterval);
+        sliderInterval = setInterval(() => {
+          let maxScroll = slider.scrollWidth - slider.clientWidth;
+          let nextScroll = slider.scrollLeft + slider.clientWidth;
+          if (nextScroll > maxScroll + 10) slider.scrollTo({ left: 0, behavior: 'smooth' });
+          else slider.scrollTo({ left: nextScroll, behavior: 'smooth' });
+        }, 3500);
+      }
+
+      // --- MITRA: INPUT MANUAL ---
+      function openInputManual() {
+        document.getElementById('in-warga').value = '';
+        document.getElementById('in-berat').value = '1';
+        document.getElementById('in-jenis').selectedIndex = 0;
+        calculatePrice();
+        switchTabMitra('m-input');
+      }
+
+      function calculatePrice() {
+        const pricePerKg = parseFloat(document.getElementById('in-jenis').value);
+        const weight = parseFloat(document.getElementById('in-berat').value) || 0;
+        const total = pricePerKg * weight;
+        document.getElementById('in-total').innerText = 'Rp ' + total.toLocaleString('id-ID');
+      }
+
+      function submitManualInput() {
+        const idWarga = document.getElementById('in-warga').value;
+        if (!idWarga) {
+          showToast('Mohon isi ID Warga / No HP!');
+          return;
+        }
+        const totalStr = document.getElementById('in-total').innerText;
+        showToast('Memproses transaksi...');
+        setTimeout(() => {
+          showToast('Sukses! Saldo ' + totalStr + ' dikirim ke ' + idWarga);
+          switchTabMitra('m-home');
+        }, 1500);
+      }
+
+      // --- MITRA: SCAN QR ---
+      function simulateQRScan() {
+        showToast('QR Terdeteksi: Budi Santoso (08129999)');
+        setTimeout(() => {
+          openInputManual();
+          document.getElementById('in-warga').value = 'Budi Santoso (08129999)';
+        }, 1000);
+      }
+
+      // --- MITRA: AI VERIFY MODAL ---
+      function openAIModal(name, type, weight, total) {
+        document.getElementById('ai-modal-name').innerText = name;
+        document.getElementById('ai-modal-type').value = type;
+        document.getElementById('ai-modal-weight').value = weight;
+        document.getElementById('ai-modal-total').innerText = 'Rp ' + total;
+        openModal('modal-ai-verify');
+      }
+
+      document.getElementById('ai-modal-weight').addEventListener('input', function () {
+        let weight = parseFloat(this.value) || 0;
+        let total = weight * 3500; // Harga demo statis
+        document.getElementById('ai-modal-total').innerText = 'Rp ' + total.toLocaleString('id-ID');
+      });
+
+      function confirmAIVerify() {
+        closeModal('modal-ai-verify');
+        showToast('Memproses pengiriman saldo...');
+        setTimeout(() => {
+          showToast('Verifikasi selesai! Saldo berhasil dikirim.');
+          document.getElementById('ai-queue-list').innerHTML = '';
+          document.getElementById('ai-empty').style.display = 'block';
+        }, 1000);
+      }
+    </script>
+  </body>
+</html>
