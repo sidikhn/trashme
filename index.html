@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TrashMe - V8 Complete System</title>
+    <title>TrashMe - V10</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" />
 
@@ -123,7 +123,7 @@
       }
 
       .btn-primary {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        background: #10b981;
         color: white;
         border: none;
         width: 100%;
@@ -164,17 +164,6 @@
         background-color: #ecfdf5;
         transform: scale(0.97);
       }
-      .btn-text {
-        color: #10b981;
-        font-size: 12px;
-        font-weight: 700;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        margin-top: 5px;
-        width: max-content;
-      }
       .auth-link {
         text-align: center;
         margin-top: 24px;
@@ -188,7 +177,7 @@
         cursor: pointer;
       }
 
-      /* === WARGA: BANNER, LOCATION, PRICES === */
+      /* === WARGA: BANNER, LOCATION, PRICES, ARTICLES === */
       .banner-slider {
         display: flex;
         overflow-x: auto;
@@ -324,6 +313,9 @@
         cursor: pointer;
         align-items: center;
       }
+      .article-card:last-child {
+        margin-bottom: 0;
+      }
       .article-img {
         width: 85px;
         height: 85px;
@@ -455,6 +447,19 @@
         text-align: right;
       }
 
+      .menu-item {
+        padding: 14px 16px;
+        transition: background 0.2s;
+        border-radius: 12px;
+      }
+      .menu-item:active {
+        background: #f9fafb;
+      }
+      .menu-item .tx-title {
+        font-weight: 600;
+        margin: 0;
+      }
+
       /* === AI CAMERA & MODALS === */
       .camera-box {
         background: #111827;
@@ -492,7 +497,6 @@
         }
       }
 
-      /* Full Overlay (QRIS Warga) */
       .overlay-full {
         position: absolute;
         top: 0;
@@ -527,7 +531,6 @@
         background: rgba(16, 185, 129, 0.05);
       }
 
-      /* Slide Up Modal (Verifikasi Mitra) */
       .overlay-slide {
         position: absolute;
         top: 0;
@@ -657,11 +660,13 @@
       <main>
         <div id="view-login" class="page active" style="padding-top: 40px">
           <div style="text-align: center; margin-bottom: 40px">
-            <div style="background: #ecfdf5; width: 80px; height: 80px; border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto">
-              <span class="material-symbols-rounded" style="font-size: 48px; color: #10b981">eco</span>
-            </div>
+            <svg width="80" height="80" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 10px">
+              <path d="M 15 30 C 15 20 20 15 30 15 L 90 15 C 100 15 105 20 105 30 C 105 40 100 45 90 45 L 75 45 L 75 90 C 75 100 70 105 60 105 C 50 105 45 100 45 90 L 45 45 L 30 45 C 20 45 15 40 15 30 Z" fill="#10b981" />
+              <circle cx="95" cy="85" r="14" fill="#10b981" />
+            </svg>
+
             <h1 style="margin: 0 0 8px 0; color: #111827; font-size: 26px; font-weight: 800">TrashMe</h1>
-            <p class="text-muted" style="font-size: 14px">Ubah sampah jadi berkah</p>
+            <p class="text-muted" style="font-size: 14px; letter-spacing: 0.5px; font-weight: 600">Trust Your Trash</p>
           </div>
 
           <div class="input-group">
@@ -686,7 +691,10 @@
 
         <div id="view-signup" class="page" style="padding-top: 20px">
           <div style="text-align: center; margin-bottom: 24px">
-            <span class="material-symbols-rounded" style="font-size: 40px; color: #10b981">eco</span>
+            <svg width="60" height="60" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 5px">
+              <path d="M 15 30 C 15 20 20 15 30 15 L 90 15 C 100 15 105 20 105 30 C 105 40 100 45 90 45 L 75 45 L 75 90 C 75 100 70 105 60 105 C 50 105 45 100 45 90 L 45 45 L 30 45 C 20 45 15 40 15 30 Z" fill="#10b981" />
+              <circle cx="95" cy="85" r="14" fill="#10b981" />
+            </svg>
             <h2 style="margin: 8px 0 0 0; font-size: 22px; font-weight: 800">Buat Akun Baru</h2>
           </div>
 
@@ -720,7 +728,7 @@
               <span class="text-muted">Selamat datang kembali,</span>
               <h3 style="margin: 0; font-size: 18px">Budi Santoso</h3>
             </div>
-            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" alt="Profile" class="profile-img" />
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" alt="Profile" class="profile-img" onclick="switchTabWarga('w-profile')" style="cursor: pointer" />
           </div>
 
           <div class="banner-slider" id="warga-slider">
@@ -792,6 +800,27 @@
             </div>
           </div>
 
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px">
+            <h3>Edukasi Lingkungan</h3>
+            <span class="text-muted" style="color: #10b981; font-weight: 700; cursor: pointer">Lihat Semua</span>
+          </div>
+          <div class="card" style="padding: 14px">
+            <div class="article-card" onclick="showToast('Membuka artikel...')">
+              <div class="article-img" style="background-image: url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=200&q=80')"></div>
+              <div class="article-text">
+                <h4>Cara Mengolah Minyak Jelantah Menjadi Sabun</h4>
+                <p class="text-muted" style="margin: 0">2 Hari yang lalu • 5 Min baca</p>
+              </div>
+            </div>
+            <div class="article-card" onclick="showToast('Membuka artikel...')">
+              <div class="article-img" style="background-image: url('https://images.unsplash.com/photo-1604187351574-c75ca79f5807?auto=format&fit=crop&w=200&q=80')"></div>
+              <div class="article-text">
+                <h4>Mengenal Jenis Plastik yang Laku Dijual</h4>
+                <p class="text-muted" style="margin: 0">4 Hari yang lalu • 3 Min baca</p>
+              </div>
+            </div>
+          </div>
+
           <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px">
               <h3>Aktivitas Terakhir</h3>
@@ -808,31 +837,11 @@
               <div class="tx-amount">+Rp 8.500</div>
             </div>
           </div>
-
-          <div class="card">
-            <h3 style="margin-bottom: 16px">Inspirasi Lingkungan</h3>
-            <div class="article-card" onclick="showToast('Buka Artikel 1')">
-              <div class="article-img" style="background-image: url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=200&q=80')"></div>
-              <div class="article-text">
-                <h4>Bahaya Plastik di Lautan Kita</h4>
-                <p class="text-muted" style="margin-bottom: 4px; font-size: 11px">Ketahui dampaknya pada ekosistem laut...</p>
-                <div class="btn-text">Baca <span class="material-symbols-rounded" style="font-size: 14px">arrow_forward</span></div>
-              </div>
-            </div>
-            <div class="article-card" onclick="showToast('Buka Artikel 2')">
-              <div class="article-img" style="background-image: url('https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=200&q=80')"></div>
-              <div class="article-text">
-                <h4>Pentingnya Pemilahan Sampah</h4>
-                <p class="text-muted" style="margin-bottom: 4px; font-size: 11px">Cara mudah memulai dari rumah...</p>
-                <div class="btn-text">Baca <span class="material-symbols-rounded" style="font-size: 14px">arrow_forward</span></div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div id="view-w-scan" class="page">
           <h3>Kamera AI Cerdas</h3>
-          <p class="text-muted" style="margin-top: -8px; margin-bottom: 20px">Arahkan kamera ke sampah, AI akan mendeteksi jenisnya.</p>
+          <p class="text-muted" style="margin-top: -8px; margin-bottom: 20px">Arahkan kamera ke sampah, AI akan mendeteksi jenis & harga pasarannya.</p>
 
           <div class="camera-box">
             <div class="scan-line"></div>
@@ -843,10 +852,10 @@
           </div>
 
           <div class="card" style="text-align: center; padding: 24px">
-            <div style="background: #ecfdf5; display: inline-block; padding: 8px 16px; border-radius: 20px; color: #10b981; font-weight: 700; font-size: 12px; margin-bottom: 10px">Hasil Deteksi</div>
+            <div style="background: #ecfdf5; display: inline-block; padding: 8px 16px; border-radius: 20px; color: #10b981; font-weight: 700; font-size: 12px; margin-bottom: 10px">Hasil Deteksi AI</div>
             <h2 style="margin: 0 0 8px 0; color: #111827; font-size: 22px">Botol Plastik PET</h2>
             <p style="font-weight: 700; color: #4b5563; margin: 0 0 20px 0">Estimasi Harga: <span style="color: #10b981">Rp 3.500 / kg</span></p>
-            <button class="btn-primary" onclick="showToast('Disimpan ke draf setoran! Bawa ke outlet terdekat.')"><span class="material-symbols-rounded">save</span> Simpan Draf</button>
+            <button class="btn-primary" onclick="showToast('Disimpan ke draf setoran! Bawa fisik sampah ke outlet terdekat untuk ditimbang.')"><span class="material-symbols-rounded">save</span> Simpan Draf Setoran</button>
           </div>
         </div>
 
@@ -887,28 +896,74 @@
         </div>
 
         <div id="view-w-profile" class="page">
-          <div style="text-align: center; margin-bottom: 24px; margin-top: 10px">
+          <h3 style="margin-bottom: 20px">Akun Saya</h3>
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px">
             <img
               src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80"
               alt="Profile"
-              style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 4px solid #10b981; margin-bottom: 12px; padding: 3px; background: white"
+              style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #10b981; padding: 2px; background: white"
             />
-            <h2 style="margin: 0; font-weight: 800; font-size: 22px">Budi Santoso</h2>
-            <p class="text-muted" style="margin: 5px 0">budi@email.com</p>
+            <div>
+              <h2 style="margin: 0 0 4px 0; font-weight: 800; font-size: 20px">Budi Santoso</h2>
+              <p class="text-muted" style="margin: 0">budi@email.com • 08123456789</p>
+              <span style="background: #111827; color: white; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; display: inline-block; margin-top: 6px">Member Reguler</span>
+            </div>
           </div>
 
-          <div class="card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center">
+          <div class="card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center; margin-bottom: 24px">
             <div style="padding: 10px">
-              <h3 style="color: #10b981; margin: 0; font-size: 26px; font-weight: 800">25.5 <span style="font-size: 14px; color: #111827">kg</span></h3>
-              <p class="text-muted" style="margin: 5px 0 0 0">Total Disetor</p>
+              <h3 style="color: #10b981; margin: 0; font-size: 22px; font-weight: 800">25.5 <span style="font-size: 12px; color: #111827">kg</span></h3>
+              <p class="text-muted" style="margin: 4px 0 0 0">Total Disetor</p>
             </div>
             <div style="padding: 10px; border-left: 2px dashed #f3f4f6">
-              <h3 style="color: #10b981; margin: 0; font-size: 26px; font-weight: 800">15.2 <span style="font-size: 14px; color: #111827">kg</span></h3>
-              <p class="text-muted" style="margin: 5px 0 0 0">CO2 Dicegah</p>
+              <h3 style="color: #10b981; margin: 0; font-size: 22px; font-weight: 800">15.2 <span style="font-size: 12px; color: #111827">kg</span></h3>
+              <p class="text-muted" style="margin: 4px 0 0 0">CO2 Dicegah</p>
             </div>
           </div>
 
-          <button class="btn-primary" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); margin-top: 20px" onclick="doLogout()">Keluar Akun</button>
+          <div class="card" style="padding: 8px">
+            <div class="tx-item menu-item" onclick="showToast('Membuka Informasi Pribadi')">
+              <div class="tx-left">
+                <span class="material-symbols-rounded" style="color: #6b7280">person</span>
+                <p class="tx-title">Informasi Pribadi</p>
+              </div>
+              <span class="material-symbols-rounded" style="color: #d1d5db">chevron_right</span>
+            </div>
+            <div class="tx-item menu-item" onclick="showToast('Membuka Rekening Pencairan')">
+              <div class="tx-left">
+                <span class="material-symbols-rounded" style="color: #6b7280">account_balance</span>
+                <p class="tx-title">Rekening & e-Wallet</p>
+              </div>
+              <span class="material-symbols-rounded" style="color: #d1d5db">chevron_right</span>
+            </div>
+            <div class="tx-item menu-item" onclick="showToast('Membuka Keamanan Akun')">
+              <div class="tx-left">
+                <span class="material-symbols-rounded" style="color: #6b7280">lock</span>
+                <p class="tx-title">Keamanan & Privasi</p>
+              </div>
+              <span class="material-symbols-rounded" style="color: #d1d5db">chevron_right</span>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 8px">
+            <div class="tx-item menu-item" onclick="showToast('Membuka Pusat Bantuan')">
+              <div class="tx-left">
+                <span class="material-symbols-rounded" style="color: #6b7280">help</span>
+                <p class="tx-title">Bantuan & FAQ</p>
+              </div>
+              <span class="material-symbols-rounded" style="color: #d1d5db">chevron_right</span>
+            </div>
+            <div class="tx-item menu-item" onclick="showToast('Membuka Syarat & Ketentuan')">
+              <div class="tx-left">
+                <span class="material-symbols-rounded" style="color: #6b7280">description</span>
+                <p class="tx-title">Syarat & Ketentuan</p>
+              </div>
+              <span class="material-symbols-rounded" style="color: #d1d5db">chevron_right</span>
+            </div>
+          </div>
+
+          <button class="btn-outline" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2; margin-top: 10px" onclick="doLogout()">Keluar Akun</button>
+          <p style="text-align: center; color: #9ca3af; font-size: 11px; margin-top: 20px; font-weight: 600">TrashMe App v1.0.0 (Warga)</p>
         </div>
 
         <div id="view-m-home" class="page">
@@ -948,7 +1003,7 @@
 
           <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
-              <h3 style="margin: 0">Antrean AI Cerdas</h3>
+              <h3 style="margin: 0">Antrean Draf Warga (AI)</h3>
               <span class="material-symbols-rounded" style="color: #d97706; font-size: 20px">info</span>
             </div>
 
@@ -958,14 +1013,14 @@
                   <div class="tx-icon" style="background: #fef3c7; color: #d97706"><span class="material-symbols-rounded">pending</span></div>
                   <div>
                     <p class="tx-title">Siti Aminah</p>
-                    <p class="text-muted" style="margin: 0">Plastik PET • Estimasi 2.5 kg</p>
+                    <p class="text-muted" style="margin: 0">Plastik PET • Estimasi Warga 2.5 kg</p>
                   </div>
                 </div>
                 <button
                   style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 10px; font-weight: 700; cursor: pointer; font-family: inherit"
                   onclick="openAIModal('Siti Aminah', 'Plastik PET', '2.5', '8.750')"
                 >
-                  Cek
+                  Timbang
                 </button>
               </div>
             </div>
@@ -1009,7 +1064,7 @@
               </select>
             </div>
             <div class="input-group">
-              <label>Berat / Volume</label>
+              <label>Berat / Volume Timbangan (Asli)</label>
               <div style="position: relative">
                 <input type="number" id="in-berat" placeholder="0.0" step="0.1" oninput="calculatePrice()" value="1" />
                 <span style="position: absolute; right: 16px; top: 14px; color: #6b7280; font-weight: 700; font-size: 14px">kg/L</span>
@@ -1021,7 +1076,7 @@
               <h2 id="in-total" style="margin: 0; font-size: 28px; color: #10b981; font-weight: 800">Rp 3.500</h2>
             </div>
           </div>
-          <button class="btn-primary" onclick="submitManualInput()">Kirim Saldo & Selesaikan</button>
+          <button class="btn-primary" onclick="submitManualInput()">Selesaikan & Kirim Saldo</button>
         </div>
 
         <div id="view-m-history" class="page">
@@ -1041,15 +1096,86 @@
         </div>
 
         <div id="view-m-profile" class="page">
-          <div class="card" style="text-align: center; padding: 30px 20px">
-            <div style="background: #ecfdf5; width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto">
-              <span class="material-symbols-rounded" style="font-size: 48px; color: #10b981">storefront</span>
+          <h3 style="margin-bottom: 20px">Outlet Saya</h3>
+
+          <div
+            class="card"
+            style="
+              text-align: center;
+              padding: 30px 20px;
+              background-color: #f8fafc;
+              background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+              background-size: 16px 16px;
+              border: 1px solid #e2e8f0;
+              border-radius: 20px;
+              color: #111827;
+              box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            "
+          >
+            <div
+              style="
+                background: #ffffff;
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 16px auto;
+                border: 3px solid #10b981;
+                box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+              "
+            >
+              <span class="material-symbols-rounded" style="font-size: 40px; color: #10b981">storefront</span>
             </div>
             <h2 style="margin: 0 0 4px 0; font-weight: 800">Outlet Mawar</h2>
-            <p class="text-muted" style="font-size: 14px">ID Mitra: MW-01293</p>
-            <div style="background: #10b981; color: white; display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 700; margin-top: 10px">Status: Aktif / Buka</div>
+            <p style="color: #6b7280; font-size: 13px; margin: 0; font-weight: 600">ID Mitra: MW-01293</p>
+            <div style="background: #10b981; color: white; display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 800; margin-top: 16px; letter-spacing: 0.5px">STATUS: BUKA</div>
           </div>
-          <button class="btn-primary" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%)" onclick="doLogout()">Keluar Aplikasi</button>
+
+          <div class="card" style="padding: 8px">
+            <div class="tx-item menu-item" onclick="showToast('Membuka Pengaturan Outlet')">
+              <div class="tx-left">
+                <span class="material-symbols-rounded" style="color: #6b7280">settings</span>
+                <p class="tx-title">Pengaturan Outlet (Jam Buka/Tutup)</p>
+              </div>
+              <span class="material-symbols-rounded" style="color: #d1d5db">chevron_right</span>
+            </div>
+            <div class="tx-item menu-item" onclick="showToast('Membuka Pencairan Dana Bank')">
+              <div class="tx-left">
+                <span class="material-symbols-rounded" style="color: #6b7280">account_balance</span>
+                <p class="tx-title">Tarik Dana Kas Bank</p>
+              </div>
+              <span class="material-symbols-rounded" style="color: #d1d5db">chevron_right</span>
+            </div>
+            <div class="tx-item menu-item" onclick="showToast('Membuka Harga Custom')">
+              <div class="tx-left">
+                <span class="material-symbols-rounded" style="color: #6b7280">price_change</span>
+                <p class="tx-title">Kustomisasi Harga Beli</p>
+              </div>
+              <span class="material-symbols-rounded" style="color: #d1d5db">chevron_right</span>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 8px">
+            <div class="tx-item menu-item" onclick="showToast('Menghubungi Tim Support Mitra')">
+              <div class="tx-left">
+                <span class="material-symbols-rounded" style="color: #6b7280">support_agent</span>
+                <p class="tx-title">Pusat Bantuan Mitra</p>
+              </div>
+              <span class="material-symbols-rounded" style="color: #d1d5db">chevron_right</span>
+            </div>
+            <div class="tx-item menu-item" onclick="showToast('Membuka Syarat Kemitraan')">
+              <div class="tx-left">
+                <span class="material-symbols-rounded" style="color: #6b7280">gavel</span>
+                <p class="tx-title">Ketentuan Kemitraan</p>
+              </div>
+              <span class="material-symbols-rounded" style="color: #d1d5db">chevron_right</span>
+            </div>
+          </div>
+
+          <button class="btn-outline" style="color: #ef4444; border-color: #fca5a5; background: #fef2f2; margin-top: 10px" onclick="doLogout()">Keluar Aplikasi</button>
+          <p style="text-align: center; color: #9ca3af; font-size: 11px; margin-top: 20px; font-weight: 600">TrashMe App v1.0.0 (Mitra Bisnis)</p>
         </div>
       </main>
 
@@ -1078,7 +1204,7 @@
       <div id="modal-ai-verify" class="overlay-slide">
         <div class="modal-content">
           <div class="modal-drag-handle" onclick="closeModal('modal-ai-verify')"></div>
-          <h3 style="margin-bottom: 20px; font-size: 20px; text-align: center">Verifikasi Deteksi AI</h3>
+          <h3 style="margin-bottom: 20px; font-size: 20px; text-align: center">Timbang & Verifikasi Draf</h3>
           <div style="background: #f9fafb; border-radius: 16px; padding: 16px; margin-bottom: 20px; display: flex; gap: 16px; align-items: center">
             <div style="width: 80px; height: 80px; background-image: url('https://images.unsplash.com/photo-1528323273322-d81458248d40?auto=format&fit=crop&w=200&q=80'); background-size: cover; border-radius: 12px"></div>
             <div>
@@ -1092,14 +1218,14 @@
             <input type="text" id="ai-modal-type" value="Plastik PET" readonly style="background: #f3f4f6; color: #6b7280" />
           </div>
           <div class="input-group">
-            <label>Konfirmasi Berat Timbangan (kg)</label>
+            <label>Masukkan Berat Asli di Timbangan (kg)</label>
             <input type="number" id="ai-modal-weight" value="2.5" step="0.1" />
           </div>
           <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-top: 1px dashed #e5e7eb; margin-top: 10px">
-            <span class="text-muted" style="font-size: 14px">Total Saldo:</span>
+            <span class="text-muted" style="font-size: 14px">Total Bayar:</span>
             <span id="ai-modal-total" style="font-size: 20px; font-weight: 800; color: #10b981">Rp 8.750</span>
           </div>
-          <button class="btn-primary" onclick="confirmAIVerify()">Setujui & Kirim Saldo</button>
+          <button class="btn-primary" onclick="confirmAIVerify()">Selesaikan Transaksi</button>
         </div>
       </div>
 
@@ -1263,7 +1389,7 @@
 
       document.getElementById('ai-modal-weight').addEventListener('input', function () {
         let weight = parseFloat(this.value) || 0;
-        let total = weight * 3500; // Harga demo statis
+        let total = weight * 3500; // Harga demo statis (Plastik PET)
         document.getElementById('ai-modal-total').innerText = 'Rp ' + total.toLocaleString('id-ID');
       });
 
@@ -1271,7 +1397,7 @@
         closeModal('modal-ai-verify');
         showToast('Memproses pengiriman saldo...');
         setTimeout(() => {
-          showToast('Verifikasi selesai! Saldo berhasil dikirim.');
+          showToast('Selesai! Saldo berhasil dikirim sesuai timbangan asli.');
           document.getElementById('ai-queue-list').innerHTML = '';
           document.getElementById('ai-empty').style.display = 'block';
         }, 1000);
